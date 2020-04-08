@@ -4,6 +4,7 @@
 #  (C) 2013 Jim Buffenbarger
 #  All rights reserved.
 from pl_evalexception import EvalException
+from pl_function import Function
 
 
 class Node(object):
@@ -313,3 +314,27 @@ class NodeWr(Node):
         val = self.expr.eval(env)
         print(val)
         return val
+        
+
+class NodeFuncDecl(Node):
+    def __init__(self, id, param_id, expr):
+        super(NodeFuncDecl, self).__init__()
+        self.id = id
+        self.param_id = param_id
+        self.expr = expr
+
+    def eval(self, env):
+        func = Function(self.param_id, self.expr)
+        return env.putFunc(self.id, func)
+
+
+class NodeFuncCall(Node):
+    def __init__(self, id, expr):
+        super(NodeFuncCall, self).__init__()
+        self.id = id
+        self.expr = expr
+
+    def eval(self, env):
+        func = env.getFunc(self.pos, self.id)
+        param = self.expr.eval(env)
+        return func.call(param)

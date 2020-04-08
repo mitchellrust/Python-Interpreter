@@ -12,6 +12,15 @@ class Environment(object):
         """ generated source for method __init__ """
         self.map = {}
         self.funcMap = {}
+        
+    def putFunc(self, var, val):
+        self.funcMap[var] = val
+        return val
+        
+    def getFunc(self, pos, var):
+        if var in self.funcMap:
+            return self.funcMap[var]
+        raise EvalException(pos, "undefined function: " + var)
 
     def put(self, var, val):
         """ generated source for method put """

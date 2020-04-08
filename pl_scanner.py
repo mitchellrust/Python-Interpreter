@@ -16,7 +16,7 @@ class Scanner(object):
     legits = set("_").union(digits).union(letters)
     symbols = set("@[\]^_`!\"#$%&',)(*+-./:;<=>?")
     operators = {'=', '+', '-', '*', '/', '(', ')', ';', '<', '<=', '>', '>=', '<>', '=='}
-    keywords = {'rd', 'wr', 'if', 'then', 'else', 'while', 'do', 'begin', 'end'}
+    keywords = {'rd', 'wr', 'if', 'then', 'else', 'while', 'do', 'begin', 'end', 'def'}
     token = ""
     lexeme = ""
 

@@ -76,9 +76,15 @@ class Parser(object):
             fact = self.parseFact()
             return NodeFactFact(fact)
         if self.curr() == Token("id"):
-            nid = self.curr()
+            id = self.curr()
             self.match("id")
-            return NodeFactId(self.pos(), nid.lex())
+            if self.curr() == Token("("):
+                self.match("(")
+                expr = self.parseExpr()
+                self.match(")")
+                return NodeFuncCall(id.lex(), expr)
+            else:
+                return NodeFactId(self.pos(), id.lex())
         num = self.curr()
         self.match("num")
         return NodeFactNum(num.lex())
@@ -112,11 +118,11 @@ class Parser(object):
 
     def parseAssn(self):
         """ generated source for method parseAssn """
-        nid = self.curr()
+        id = self.curr()
         self.match("id")
         self.match("=")
         expr = self.parseExpr()
-        assn = NodeAssn(nid.lex(), expr)
+        assn = NodeAssn(id.lex(), expr)
         return assn
 
     def parseWr(self):
@@ -128,10 +134,10 @@ class Parser(object):
         
     def parseRd(self):
         self.match("rd")
-        nid = self.curr()
+        id = self.curr()
+        self.match("id")
         num = input()
-        self.scanner.next()
-        rd = NodeRd(nid.lex(), float(num))
+        rd = NodeRd(id.lex(), float(num))
         return rd
         
     def parseIf(self):
@@ -160,6 +166,19 @@ class Parser(object):
         self.match("end")
         begin = NodeBegin(block)
         return begin
+        
+    def parseFuncDecl(self):
+        self.match("def")
+        id = self.curr()
+        self.match("id")
+        self.match("(")
+        param_id = self.curr()
+        self.match("id")
+        self.match(")")
+        self.match("=")
+        expr = self.parseExpr()
+        func_decl = NodeFuncDecl(id.lex(), param_id.lex(), expr)
+        return func_decl
 
     def parseStmt(self):
         """ generated source for method parseStmt """
@@ -178,6 +197,9 @@ class Parser(object):
         if self.curr() == Token("begin"):
             begin = self.parseBegin()
             return NodeStmt(begin)
+        if self.curr() == Token("def"):
+            func_decl = self.parseFuncDecl()
+            return NodeStmt(func_decl)
         if self.curr() == Token("id"):
             assn = self.parseAssn()
             return NodeStmt(assn)
