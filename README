@@ -1,0 +1,19 @@
+CS354: Programming Languages
+iX (Extra Credit): Built-In Functions
+Mitchell Rust
+April 25, 2020
+
+At first, in implementing the built-in functions for this interpreter
+assignment, I had wanted to go with the approach of having the user define these
+functions similar to any other function, in order to remain consistent in how my
+interpreter handled functions. That way, a user know that the only functions
+available to them are the ones they declared. However, after more thought, I
+wanted to be able to use the power of python's built-in math library, so
+pre-defining the functions in the interpreter seemed like the way to go.
+
+In order to use the python math library, I had to create a new node for each
+built-in function and handle the built-in function calls in the parser, to
+return those nodes instead of looking for a user-defined function. This proved
+quite simple, as utilizing the math library allowed me to just evaluate whatever
+expression was passed to the function, and then pass that value into the
+library's function and return the result.

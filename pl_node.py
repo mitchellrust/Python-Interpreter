@@ -5,6 +5,7 @@
 #  All rights reserved.
 from pl_evalexception import EvalException
 from pl_function import Function
+import math
 
 
 class Node(object):
@@ -338,3 +339,63 @@ class NodeFuncCall(Node):
         func = env.getFunc(self.pos, self.id)
         param = self.expr.eval(env)
         return func.call(param)
+
+
+class NodeCos(Node):
+    def __init__(self, expr):
+        super(NodeCos, self).__init__()
+        self.expr = expr
+
+    def eval(self, env):
+        val = self.expr.eval(env)
+        return math.cos(val)
+
+
+class NodeSin(Node):
+    def __init__(self, expr):
+        super(NodeSin, self).__init__()
+        self.expr = expr
+
+    def eval(self, env):
+        val = self.expr.eval(env)
+        return math.sin(val)
+
+
+class NodeTan(Node):
+    def __init__(self, expr):
+        super(NodeTan, self).__init__()
+        self.expr = expr
+
+    def eval(self, env):
+        val = self.expr.eval(env)
+        return math.tan(val)
+
+
+class NodeAbs(Node):
+    def __init__(self, expr):
+        super(NodeAbs, self).__init__()
+        self.expr = expr
+
+    def eval(self, env):
+        val = self.expr.eval(env)
+        return abs(val)
+
+
+class NodeLog(Node):
+    def __init__(self, expr):
+        super(NodeLog, self).__init__()
+        self.expr = expr
+
+    def eval(self, env):
+        val = self.expr.eval(env)
+        return math.log10(val)
+
+
+class NodeLn(Node):
+    def __init__(self, expr):
+        super(NodeLn, self).__init__()
+        self.expr = expr
+
+    def eval(self, env):
+        val = self.expr.eval(env)
+        return math.log(val)

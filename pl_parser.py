@@ -8,6 +8,8 @@ from pl_token import Token
 
 class Parser(object):
     """ generated source for class Parser """
+    builtins = ['cos', 'sin', 'tan', 'abs', 'log', 'ln']
+    
     def __init__(self):
         self.scanner = None
 
@@ -82,9 +84,20 @@ class Parser(object):
                 self.match("(")
                 expr = self.parseExpr()
                 self.match(")")
+                if id.lex() == "cos":
+                    return NodeCos(expr)
+                if id.lex() == "sin":
+                    return NodeSin(expr)
+                if id.lex() == "tan":
+                    return NodeTan(expr)
+                if id.lex() == "abs":
+                    return NodeAbs(expr)
+                if id.lex() == "log":
+                    return NodeLog(expr)
+                if id.lex() == "ln":
+                    return NodeLn(expr)
                 return NodeFuncCall(id.lex(), expr)
-            else:
-                return NodeFactId(self.pos(), id.lex())
+            return NodeFactId(self.pos(), id.lex())
         num = self.curr()
         self.match("num")
         return NodeFactNum(num.lex())
@@ -170,6 +183,8 @@ class Parser(object):
     def parseFuncDecl(self):
         self.match("def")
         id = self.curr()
+        if id.lex() in self.builtins:
+            raise SyntaxException(self.pos(), "func header", id)
         self.match("id")
         self.match("(")
         param_id = self.curr()
